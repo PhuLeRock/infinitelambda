@@ -289,48 +289,48 @@ resource "aws_security_group" "RDS" {
 ###
 #ECR
 ###
-# resource "aws_ecr_repository" "registry" {
-#   name                 = "ecr001"
-#   image_tag_mutability = "MUTABLE"
-#   tags = {
-#     Owner       = "DevopsTest"
-#     Environment = "dev"
-#     Terraform   = true
-#   }
-# }
+resource "aws_ecr_repository" "registry" {
+  name                 = "ecr001"
+  image_tag_mutability = "MUTABLE"
+  tags = {
+    Owner       = "DevopsTest"
+    Environment = "dev"
+    Terraform   = true
+  }
+}
 
 ###
 # S3 website
 ###
-# resource "aws_s3_bucket" "staticweb" {
-#   bucket = "infinitedevopstest"
-#   acl    = "public-read"
-#   #policy = file("policy.json")
+resource "aws_s3_bucket" "staticweb" {
+  bucket = "infinitedevopstest"
+  acl    = "public-read"
+  #policy = file("policy.json")
 
-#   website {
-#     index_document = "index.html"
-#     error_document = "index.html"
-#   }
-# }
+  website {
+    index_document = "index.html"
+    error_document = "index.html"
+  }
+}
 
 ####
 #RDS
 ####
-# resource "aws_db_parameter_group" "my-parameter-group" {
-#   name        = "my-parameter-group"
-#   family      = "postgres12"
-#   description = "my-parameter-group"
-# }
+resource "aws_db_parameter_group" "my-parameter-group" {
+  name        = "my-parameter-group"
+  family      = "postgres12"
+  description = "my-parameter-group"
+}
 
-# module "aws_rds_postgres" {
-#   source = "./modules/rds-ssm-postgres"
-#   identifier             = "rds-identifier"
-#   subnet_group           =  aws_db_subnet_group.rds_subnetgroup.id
-#   parameter_group        = "my-parameter-group"
-#   vpc_security_group_ids = [aws_security_group.RDS.id]
-#   monitoring_interval = 0
-#   deletion_protection = false
-# }
+module "aws_rds_postgres" {
+  source = "./modules/rds-ssm-postgres"
+  identifier             = "rds-identifier"
+  subnet_group           =  aws_db_subnet_group.rds_subnetgroup.id
+  parameter_group        = "my-parameter-group"
+  vpc_security_group_ids = [aws_security_group.RDS.id]
+  monitoring_interval = 0
+  deletion_protection = false
+}
 
 
 ##########
