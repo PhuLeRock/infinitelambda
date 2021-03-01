@@ -9,7 +9,7 @@ pipeline {
         stage("git checkout") {
             steps {
                 git credentialsId: 'phulegit', url: 'https://github.com/PhuLeRock/tools.git'
-                ls -la
+                sh 'ls -la'
             }
         }           
     
