@@ -1,0 +1,9 @@
+id_rsa.pub
+phutlv.rsa
+infrastructure/aws_hosts
+infrastructure/.terraform.lock.hcl
+infrastructure/.terraform/*
+infrastructure/terraform.tfstate.backup
+infrastructure/terraform.tfstate
+infrastructure/ori
+

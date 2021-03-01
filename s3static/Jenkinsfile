@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    environment {
+        AWS_DEFAULT_REGION = "ap-southeast-1"
+        AWS_DEFAULT_OUTPUT = "text"
+        ABC = 2
+    }
+    stages {
+        stage("git checkout") {
+            steps {
+                git credentialsId: 'phulegit', url: 'https://github.com/PhuLeRock/tools.git'
+                ls -la
+            }
+        }           
+    
+    stage('001') {
+        steps {
+            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'phule', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+            echo 'Hello world'
+            sh '''
+            /usr/bin/aws s3 ls
+            echo "${AWS_DEFAULT_REGION}"
+            echo "${ABC}"
+            '''    
+            }
+        }
+    }    
+    }
+}            

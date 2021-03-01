@@ -1,0 +1,113 @@
+# ansible-playbook -i aws_hosts jenkins.yaml --private-key /home/phuletv/phultv.rsa
+
+---
+- hosts: dev
+  become: yes
+  remote_user: ec2-user
+  tasks:
+    - name: install docker
+      shell: amazon-linux-extras install -y docker
+      register: result
+    - name: start docker service
+      shell: service docker start
+      register: result
+    - name: add user to docker group
+      shell: usermod -a -G docker ec2-user
+      register: result    
+    - name: install git
+      yum:
+        name: git
+        state: present
+    - name: install wget
+      yum:
+        name: wget
+        state: present
+    
+    - name: install openjdk
+      yum:
+        name: java-1.8.0-openjdk
+        state: present
+    
+    - name: download jenkins.repo
+      get_url:
+        url: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+    
+    - name: import jenkins key
+      rpm_key:
+        state: present
+        key: https://pkg.jenkins.io/redhat/jenkins.io.key
+        
+    - name: install jenkins
+      yum:
+        name: jenkins
+        state: present
+
+    - name: change port Jenkins to 3389
+      ansible.builtin.command: /usr/bin/sed -i s,8080,3389,g /etc/sysconfig/jenkins
+
+    - name: add user jenkins to docker group
+      shell: usermod -a -G docker jenkins
+
+    - name: enable jenkins
+      systemd:
+        name: jenkins
+        enabled: true
+    - name: start jenkins
+      systemd:
+        name: jenkins
+        state: started
+
+  
+    - name: add postgres
+      yum_repository:
+        name: PostgreSQL
+        description: PostgreSQL 12 for RHEL/CentOS 7 - x86_64
+        file: epgdg.repo
+        baseurl: https://download.postgresql.org/pub/repos/yum/12/redhat/rhel-7-x86_64
+        gpgcheck: no
+
+    - name: install postgres12 client
+      yum:
+        name: postgresql12
+        state: present 
+    
+    - name: sleep for 30 seconds and continue with play
+      wait_for: timeout=30
+      #delegate_to: localhost
+    
+    - name: init password jenkin
+      shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+      changed_when: false
+      register: result
+    
+    - name: print init password jenkins
+      debug:
+        var: result.stdout  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
