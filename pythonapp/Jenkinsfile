@@ -16,9 +16,10 @@ pipeline {
                 sh '''
                 echo ${ECRREPONAME}
                 echo ${ECRCREDID}
+                echo end of echo
                 '''
                 script {
-                    docker.withRegistry('https://"${ECRREPONAME}", ecr:ap-southeast-1:"${ECRCREDID}"') {
+                    docker.withRegistry('https://'"${ECRREPONAME}", ecr:ap-southeast-1:"${ECRCREDID}") {
                     docker.image(${ECRREPONAME}).push(1.0) 
                     }
                 }
