@@ -5,7 +5,7 @@ pipeline {
         AWS_DEFAULT_OUTPUT = "text"
         ECRRepoName = "667656621301.dkr.ecr.ap-southeast-1.amazonaws.com/pyapp"
         ECRCredID = 'phule'
-        GitRepo = https://github.com/PhuLeRock/infinitelambda.git
+        GitRepo = 'https://github.com/PhuLeRock/infinitelambda.git'
         GitCreID = 'phulegit'
     }
 
