@@ -23,9 +23,6 @@ pipeline {
                     docker.image("pythonapp").push(1.0)
                     }
                 }
-                sh '''
-                echo after push
-                '''    
                 }
             }
     }    
