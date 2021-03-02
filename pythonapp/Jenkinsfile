@@ -9,12 +9,7 @@ pipeline {
         GITCREDID = 'phulegit'
     }
 
-    stages {
-        stage("git checkout") {
-            steps {
-                git credentialsId: "${GITCREDID}", url: "${GITREPO}"
-            }
-        }           
+    stages {   
     
         stage('push test') {
             steps {
