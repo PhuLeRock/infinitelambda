@@ -330,6 +330,9 @@ module "aws_rds_postgres" {
   vpc_security_group_ids = [aws_security_group.RDS.id]
   monitoring_interval = 0
   deletion_protection = false
+  tags = {
+    Name = "DB"
+  }
 }
 
 
@@ -374,9 +377,9 @@ resource "aws_instance" "dev" {
 #  value = var.dbname
 #}
 
-#output "Database_Hostname" {
+# output "Database_Hostname" {
 #  value = aws_db_instance.db.endpoint
-#}
+# }
 
 #output "Database_Username" {
 #  value = var.dbuser
@@ -390,10 +393,10 @@ output "Jenkins" {
   value = "http://${aws_instance.dev.public_ip}:3389"
 }
 #ansible-playbook -i aws_hosts jenkins.yaml --private-key /home/phuletv/phultv_np.rsa
-# output "website_URL" {
-#   value = "http://${aws_s3_bucket.staticweb.website_endpoint}"
-# }
-# output "ECR_url" {
-#   value= aws_ecr_repository.registry.repository_url
-# }
+output "website_URL" {
+  value = "http://${aws_s3_bucket.staticweb.website_endpoint}"
+}
+output "ECR_url" {
+  value= aws_ecr_repository.registry.repository_url
+}
 

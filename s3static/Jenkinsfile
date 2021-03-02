@@ -3,12 +3,11 @@ pipeline {
     environment {
         AWS_DEFAULT_REGION = "ap-southeast-1"
         AWS_DEFAULT_OUTPUT = "text"
-        ABC = 2
     }
     stages {
         stage("git checkout") {
             steps {
-                git credentialsId: 'phulegit', url: 'https://github.com/PhuLeRock/tools.git'
+                git credentialsId: 'phulegit', url: 'https://github.com/PhuLeRock/infinitelambda.git'
                 sh 'ls -la'
             }
         }           
@@ -18,9 +17,8 @@ pipeline {
             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'phule', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
             echo 'Hello world'
             sh '''
-            /usr/bin/aws s3 ls
-            echo "${AWS_DEFAULT_REGION}"
-            echo "${ABC}"
+            /usr/bin/sed -i s,buildnumber,${BUILD_NUMBER},g ../s3static/index.html
+            /usr/bin/aws s3 cp ../s3static/index.html s3://infinitedevopstest/ --acl public-read
             '''    
             }
         }

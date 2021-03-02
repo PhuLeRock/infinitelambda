@@ -5,3 +5,5 @@
 3. add aws credential, git cre, ecr
 4. export AWS_DEFAULT_REGION=ap-southeast-1
 
+aws s3 cp ../s3static/index.html s3://infinitedevopstest/ --acl public-read  
+
