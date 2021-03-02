@@ -1,26 +1,26 @@
 pipeline {
     agent any
     environment {
-        AWS_DEFAULT_REGION = "ap-southeast-1"
-        AWS_DEFAULT_OUTPUT = "text"
-        ECRRepoName = "667656621301.dkr.ecr.ap-southeast-1.amazonaws.com/pyapp"
-        ECRCredID = 'phule'
-        GitRepo = 'https://github.com/PhuLeRock/infinitelambda.git'
-        GitCreID = 'phulegit'
+        AWS_DEFAULT_REGION = 'ap-southeast-1'
+        AWS_DEFAULT_OUTPUT = 'text'
+        ECRREPONAME = '667656621301.dkr.ecr.ap-southeast-1.amazonaws.com/pyapp'
+        ECRCREDID = 'phule'
+        GITREPO = 'https://github.com/PhuLeRock/infinitelambda.git'
+        GITCREDID = 'phulegit'
     }
 
     stages {
         stage("git checkout") {
             steps {
-                git credentialsId: '$GitCreID', url: '$GitRepo'
+                git credentialsId: ${GITCREDID}, url: ${GITREPO}
             }
         }           
     
         stage('push test') {
             steps {
                 script {
-                    docker.withRegistry("https://${ECRRepoName}, ecr:ap-southeast-1:phule") {
-                    docker.image(${ECRRepoName}).push(1.0) 
+                    docker.withRegistry("https://${ECRREPONAME}, ecr:ap-southeast-1:p${ECRCREDID}") {
+                    docker.image(${ECRREPONAME}).push(1.0) 
                     }
                 }
             }                    
