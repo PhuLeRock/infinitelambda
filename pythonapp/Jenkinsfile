@@ -12,14 +12,14 @@ pipeline {
     stages {
         stage("git checkout") {
             steps {
-                git credentialsId: ${GITCREDID}, url: ${GITREPO}
+                git credentialsId: "${GITCREDID}", url: "${GITREPO}"
             }
         }           
     
         stage('push test') {
             steps {
                 script {
-                    docker.withRegistry("https://${ECRREPONAME}, ecr:ap-southeast-1:p${ECRCREDID}") {
+                    docker.withRegistry('https://"${ECRREPONAME}", ecr:ap-southeast-1:"${ECRCREDID}"') {
                     docker.image(${ECRREPONAME}).push(1.0) 
                     }
                 }
