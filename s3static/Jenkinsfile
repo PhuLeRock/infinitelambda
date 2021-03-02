@@ -17,8 +17,8 @@ pipeline {
             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'phule', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
             echo 'Hello world'
             sh '''
-            /usr/bin/sed -i s,buildnumber,${BUILD_NUMBER},g ../s3static/index.html
-            /usr/bin/aws s3 cp ../s3static/index.html s3://infinitedevopstest/ --acl public-read
+            /usr/bin/sed -i s,buildnumber,${BUILD_NUMBER},g s3static/index.html
+            /usr/bin/aws s3 cp s3static/index.html s3://infinitedevopstest/ --acl public-read
             '''    
             }
         }
