@@ -13,6 +13,10 @@ pipeline {
     
         stage('push test') {
             steps {
+                shell ```
+                echo ${ECRREPONAME}
+                echo ${ECRCREDID}
+                ```
                 script {
                     docker.withRegistry('https://"${ECRREPONAME}", ecr:ap-southeast-1:"${ECRCREDID}"') {
                     docker.image(${ECRREPONAME}).push(1.0) 
