@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage("git checkout") {
             steps {
-                git credentialsId: ${GitCreID}, url: ${GitRepo}
+                git credentialsId: '${GitCreID}', url: '${GitRepo}'
             }
         }           
     
