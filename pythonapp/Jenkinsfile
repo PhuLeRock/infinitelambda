@@ -10,7 +10,9 @@ pipeline {
     }
 
     stages {   
-    
+        stage(checkout code) {
+            git credentialsId: "${GITCREDID}", url: "${GITREPO}"
+        }
         stage('push test') {
             steps {
                 sh '''
@@ -18,11 +20,6 @@ pipeline {
                 echo ${ECRCREDID}
                 echo end of echo
                 '''
-                script {
-                    docker.withRegistry("https://667656621301.dkr.ecr.ap-southeast-1.amazonaws.com", ecr:ap-southeast-1:phule) {
-                    docker.image(667656621301.dkr.ecr.ap-southeast-1.amazonaws.com/pyapp).push(1.0) 
-                    }
-                }
             }                    
         }
             
