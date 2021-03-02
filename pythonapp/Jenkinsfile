@@ -16,7 +16,7 @@ pipeline {
             }
         }           
     
-        stage('') {
+        stage('push test') {
             steps {
                 script {
                     docker.withRegistry('https://667656621301.dkr.ecr.ap-southeast-1.amazonaws.com/ecr001', 'ecr:ap-southeast-1:phule') {
