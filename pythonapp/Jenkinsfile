@@ -21,13 +21,13 @@ pipeline {
                 script {
                     //
                     //docker.image("pythonapp").push(1.0)
-                    }                
+                }                
                 script {
                     docker.withRegistry(https://'${ECRRepoName}', ecr:ap-southeast-1:'${ECRCredID}')') {
                      docker.image('${ECRRepoName}').push(1.0)
-                    }
                 }
-                }
+            }
+        }
             
-    }    
+    }
 }            
