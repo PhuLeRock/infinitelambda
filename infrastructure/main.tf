@@ -290,7 +290,7 @@ resource "aws_security_group" "RDS" {
 #ECR
 ###
 resource "aws_ecr_repository" "registry" {
-  name                 = "ecr001"
+  name                 = "pyapp"
   image_tag_mutability = "MUTABLE"
   tags = {
     Owner       = "DevopsTest"
