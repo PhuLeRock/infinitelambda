@@ -6,4 +6,5 @@ infrastructure/.terraform/*
 infrastructure/terraform.tfstate.backup
 infrastructure/terraform.tfstate
 infrastructure/ori
+pythonapp/sync.sh
 

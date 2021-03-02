@@ -3,23 +3,32 @@ pipeline {
     environment {
         AWS_DEFAULT_REGION = 'ap-southeast-1'
         AWS_DEFAULT_OUTPUT = 'text'
-        ECRREPONAME = '667656621301.dkr.ecr.ap-southeast-1.amazonaws.com/pyapp'
+        ECRREPONAME = 'pyapp'
+        ECRURL = 'https://667656621301.dkr.ecr.ap-southeast-1.amazonaws.com/'
         ECRCREDID = 'phule'
         GITREPO = 'https://github.com/PhuLeRock/infinitelambda.git'
         GITCREDID = 'phulegit'
+        SHORT_COMMIT = """${sh(
+        returnStdout: true,
+        script: 'git rev-parse --short HEAD'
+        )}""" 
     }
-
+    
     stages {   
-        stage(checkout code) {
-            git credentialsId: "${GITCREDID}", url: "${GITREPO}"
+        //def GITCOMMITSHORTHASH = sh ("git rev-parse --short HEAD")
+        stage('checkout code') {
+            steps {
+                git credentialsId: "${GITCREDID}", url: "${GITREPO}"
+            }
         }
         stage('push test') {
             steps {
-                sh '''
-                echo ${ECRREPONAME}
-                echo ${ECRCREDID}
-                echo end of echo
-                '''
+                script {
+                    sh 'echo SHORT_COMMIT'
+                    docker.withRegistry("${ECRURL}", "ecr:ap-southeast-1:${ECRCREDID}") {
+                        docker.image("pyapp").push("${SHORT_COMMIT}")
+                    }
+                }
             }                    
         }
             
