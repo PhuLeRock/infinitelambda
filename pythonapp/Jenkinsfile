@@ -17,14 +17,11 @@ pipeline {
         }           
     
         stage('push test') {
-            steps {
-                script {
-                    //
-                    //docker.image("pythonapp").push(1.0)
-                }                
+            steps {                
                 script {
                     docker.withRegistry(https://'${ECRRepoName}', ecr:ap-southeast-1:'${ECRCredID}')') {
-                     docker.image('${ECRRepoName}').push(1.0)
+                    docker.image('${ECRRepoName}').push(1.0)
+                    }
                 }
             }
         }
