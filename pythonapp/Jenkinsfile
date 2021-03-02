@@ -19,8 +19,8 @@ pipeline {
                 echo end of echo
                 '''
                 script {
-                    docker.withRegistry('https://'"${ECRREPONAME}", ecr:ap-southeast-1:"${ECRCREDID}") {
-                    docker.image(${ECRREPONAME}).push(1.0) 
+                    docker.withRegistry(https://667656621301.dkr.ecr.ap-southeast-1.amazonaws.com, ecr:ap-southeast-1:"${ECRCREDID}") {
+                    docker.image(667656621301.dkr.ecr.ap-southeast-1.amazonaws.com/pyapp).push(1.0) 
                     }
                 }
             }                    
