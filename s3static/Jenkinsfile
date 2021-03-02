@@ -18,6 +18,7 @@ pipeline {
             echo 'Hello world'
             sh '''
             /usr/bin/sed -i s,buildnumber,${BUILD_NUMBER},g s3static/index.html
+            /usr/bin/sed -i s,gitrevision,${GIT_COMMIT},g s3static/index.html
             /usr/bin/aws s3 cp s3static/index.html s3://infinitedevopstest/ --acl public-read
             '''    
             }
