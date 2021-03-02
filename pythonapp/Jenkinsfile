@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+    environment {
+        AWS_DEFAULT_REGION = "ap-southeast-1"
+        AWS_DEFAULT_OUTPUT = "text"
+    }
+	parameters {
+    string(defaultValue: "pythonapp", description: 'What is name of repo?', name: 'repoName')
+    choice(choices: ['ecr:ap-southeast-1:phu le', 'ecr:us-east-2:aws_id'], description: 'What is AWS ECR Credentials ?', name: 'ECRCRED')
+		string(defaultValue: "https://377414509754.dkr.ecr.us-east-1.amazonaws.com", description: 'What is URL of ECR ?', name: 'ECRURL')
+    }    
+    stages {
+        stage("git checkout") {
+            steps {
+                git credentialsId: 'phulegit', url: 'https://github.com/PhuLeRock/infinitelambda.git'
+            }
+        }           
+    
+        stage('') {
+            steps {
+                docker.withRegistry("667656621301.dkr.ecr.ap-southeast-1.amazonaws.com/ecr001", "ecr:ap-southeast-1:phule") {
+                  docker.image("pythonapp").push(1.0)
+                }
+                sh '''
+                echo after push
+                '''    
+                }
+            }
+    }    
+}            
