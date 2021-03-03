@@ -31,7 +31,7 @@ pipeline {
         }
         stage('run image') {
             steps {
-                sh 'run this images'
+                sh 'echo run this images'
                 script {
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'phule', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                         // some block
