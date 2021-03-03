@@ -25,7 +25,7 @@ pipeline {
             steps {
                 echo 'build pythonapp/Dockerfile'
                 script {
-                    docker.build('${ECRREPONAME}', pythonapp/)
+                    docker.build('${ECRREPONAME}', "pythonapp/")
                 }
             }
         }
