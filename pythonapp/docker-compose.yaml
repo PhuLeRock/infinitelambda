@@ -1,0 +1,13 @@
+
+# docker run -d --name test --rm -e AWS_ACCESS_KEY_ID=AKIAJAJ6VZTNWA4VRBSQ -e AWS_SECRET_ACCESS_KEY=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 -e AWS_DEFAULT_REGION=ap-southeast-1 ec2-user_pyapp tail -f /dev/null
+# docker run --name test --rm -e AWS_ACCESS_KEY_ID=AKIAJAJ6VZTNWA4VRBSQ -e AWS_SECRET_ACCESS_KEY=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 -e AWS_DEFAULT_REGION=ap-southeast-1 -e AWS_DEFAULT_OUTPUT=text ec2-user_pyapp /usr/bin/python3 /src/pyapp.py
+
+version: "3.9"
+services:
+  pyapp:
+    environment: 
+      - AWS_ACCESS_KEY_ID=AKIAJAJ6VZTNWA4VRBSQ
+      - AWS_SECRET_ACCESS_KEY=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
+      - AWS_DEFAULT_REGION=ap-southeast-1
+      - AWS_DEFAULT_OUTPUT=text
+    build: .

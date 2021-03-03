@@ -21,12 +21,20 @@ pipeline {
                 git credentialsId: "${GITCREDID}", url: "${GITREPO}"
             }
         }
-        stage('push test') {
+        stage('Build image pyapp') {
+            steps {
+                echo 'build pythonapp/Dockerfile'
+                script {
+                    docker.build('${ECRREPONAME}', pythonapp/)
+                }
+            }
+        }
+        stage('push image') {
             steps {
                 script {
                     sh 'echo SHORT_COMMIT'
                     docker.withRegistry("${ECRURL}", "ecr:ap-southeast-1:${ECRCREDID}") {
-                        docker.image("pyapp").push("${SHORT_COMMIT}")
+                        docker.image('${ECRREPONAME}').push("${SHORT_COMMIT}")
                     }
                 }
             }                    
