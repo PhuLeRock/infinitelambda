@@ -329,7 +329,8 @@ module "aws_rds_postgres" {
   parameter_group        = "my-parameter-group"
   vpc_security_group_ids = [aws_security_group.RDS.id]
   monitoring_interval = 0
-  deletion_protection = false
+  deletion_protection = false # for testing
+  skip_final_snapshot = true # for testing
   tags = {
     Name = "DB"
   }
@@ -373,9 +374,9 @@ resource "aws_instance" "dev" {
 #-------OUTPUTS ------------
 ############################
 
-#output "Database_Name" {
-#  value = var.dbname
-#}
+output "Database_Name" {
+ value = module.aws_rds_postgres.rds_postgres_endpoint
+}
 
 # output "Database_Hostname" {
 #  value = aws_db_instance.db.endpoint
