@@ -1,4 +1,4 @@
-#aws_profile = "nashtechdevops" # here is the aws profile that you define by yourself in ~/.aws/credentials
+
 aws_profile = "default"
 aws_region        = "ap-southeast-1" #singapore
 

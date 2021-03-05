@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+    environment {
+        AWS_DEFAULT_REGION = 'ap-southeast-1'
+        AWS_DEFAULT_OUTPUT = 'text'
+        ECRREPONAME = 'pyapp'
+        ECRURL = 'https://667656621301.dkr.ecr.ap-southeast-1.amazonaws.com/'
+        ECRCREDID = 'phule'
+        GITREPO = 'https://github.com/PhuLeRock/infinitelambda.git'
+        GITCREDID = 'phulegit'
+        SHORT_COMMIT = """${sh(
+        returnStdout: true,
+        script: 'git rev-parse --short HEAD'
+        )}""" 
+    }
+    
+    stages {   
+        //def GITCOMMITSHORTHASH = sh ("git rev-parse --short HEAD")
+        stage('checkout code') {
+            steps {
+                git credentialsId: "${GITCREDID}", url: "${GITREPO}"
+            }
+        }
+        stage('Build image pyapp') {
+            steps {
+                echo 'build pythonapp/Dockerfile'
+                script {
+                    docker.build('${ECRREPONAME}', "pythonapp/")
+                }
+            }
+        }
+        stage('run image') {
+            steps {
+                sh 'echo run this images'
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'phule', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                    sh 'docker run \
+                    -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} -e AWS_DEFAULT_REGION=ap-southeast-1 -e AWS_DEFAULT_OUTPUT=text \
+                    --rm --name testpyapp ${ECRREPONAME}'
+                    
+                }
+            }
+        }
+        stage('push image') {
+            steps {
+                script {
+                    sh 'echo SHORT_COMMIT'
+                    docker.withRegistry("${ECRURL}", "ecr:ap-southeast-1:${ECRCREDID}") {
+                        docker.image('${ECRREPONAME}').push("${SHORT_COMMIT}")
+                    }
+                }
+            }                    
+        }
+            
+    }
+}            
