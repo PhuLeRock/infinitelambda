@@ -43,5 +43,7 @@ Gitt URL: `https://github.com/PhuLeRock/infinitelambda.git`
 
 Jenkinsfile location: `s3static/Jenkinsfile`
 
+### NOTE:
+In case you don't want to build and run pyapp with Jenkins, you can run pythonapp/docker-compose.yaml in ec2 machine (read Prerequisite).
 
 
