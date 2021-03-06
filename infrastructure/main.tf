@@ -289,48 +289,52 @@ resource "aws_security_group" "RDS" {
 ###
 #ECR
 ###
-# resource "aws_ecr_repository" "registry" {
-#   name                 = "ecr001"
-#   image_tag_mutability = "MUTABLE"
-#   tags = {
-#     Owner       = "DevopsTest"
-#     Environment = "dev"
-#     Terraform   = true
-#   }
-# }
+resource "aws_ecr_repository" "registry" {
+  name                 = "pyapp"
+  image_tag_mutability = "MUTABLE"
+  tags = {
+    Owner       = "DevopsTest"
+    Environment = "dev"
+    Terraform   = true
+  }
+}
 
 ###
 # S3 website
 ###
-# resource "aws_s3_bucket" "staticweb" {
-#   bucket = "infinitedevopstest"
-#   acl    = "public-read"
-#   #policy = file("policy.json")
+resource "aws_s3_bucket" "staticweb" {
+  bucket = "infinitedevopstest"
+  acl    = "public-read"
+  #policy = file("policy.json")
 
-#   website {
-#     index_document = "index.html"
-#     error_document = "index.html"
-#   }
-# }
+  website {
+    index_document = "index.html"
+    error_document = "index.html"
+  }
+}
 
 ####
 #RDS
 ####
-# resource "aws_db_parameter_group" "my-parameter-group" {
-#   name        = "my-parameter-group"
-#   family      = "postgres12"
-#   description = "my-parameter-group"
-# }
+resource "aws_db_parameter_group" "my-parameter-group" {
+  name        = "my-parameter-group"
+  family      = "postgres12"
+  description = "my-parameter-group"
+}
 
-# module "aws_rds_postgres" {
-#   source = "./modules/rds-ssm-postgres"
-#   identifier             = "rds-identifier"
-#   subnet_group           =  aws_db_subnet_group.rds_subnetgroup.id
-#   parameter_group        = "my-parameter-group"
-#   vpc_security_group_ids = [aws_security_group.RDS.id]
-#   monitoring_interval = 0
-#   deletion_protection = false
-# }
+module "aws_rds_postgres" {
+  source = "./modules/rds-ssm-postgres"
+  identifier             = "rds-identifier"
+  subnet_group           =  aws_db_subnet_group.rds_subnetgroup.id
+  parameter_group        = "my-parameter-group"
+  vpc_security_group_ids = [aws_security_group.RDS.id]
+  monitoring_interval = 0
+  deletion_protection = false # for testing
+  skip_final_snapshot = true # for testing
+  tags = {
+    Name = "DB"
+  }
+}
 
 
 ##########
@@ -370,13 +374,13 @@ resource "aws_instance" "dev" {
 #-------OUTPUTS ------------
 ############################
 
-#output "Database_Name" {
-#  value = var.dbname
-#}
+output "Database_Name" {
+ value = module.aws_rds_postgres.rds_postgres_endpoint
+}
 
-#output "Database_Hostname" {
+# output "Database_Hostname" {
 #  value = aws_db_instance.db.endpoint
-#}
+# }
 
 #output "Database_Username" {
 #  value = var.dbuser
@@ -390,10 +394,10 @@ output "Jenkins" {
   value = "http://${aws_instance.dev.public_ip}:3389"
 }
 #ansible-playbook -i aws_hosts jenkins.yaml --private-key /home/phuletv/phultv_np.rsa
-# output "website_URL" {
-#   value = "http://${aws_s3_bucket.staticweb.website_endpoint}"
-# }
-# output "ECR_url" {
-#   value= aws_ecr_repository.registry.repository_url
-# }
+output "website_URL" {
+  value = "http://${aws_s3_bucket.staticweb.website_endpoint}"
+}
+output "ECR_url" {
+  value= aws_ecr_repository.registry.repository_url
+}
 

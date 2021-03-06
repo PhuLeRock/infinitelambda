@@ -1,5 +1,6 @@
 # ansible-playbook -i aws_hosts jenkins.yaml --private-key /home/phuletv/phultv.rsa
-
+# sudo curl -L "https://github.com/docker/compose/releases/download/1.28.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+# sudo chmod +x /usr/local/bin/docker-compose
 ---
 - hosts: dev
   become: yes
@@ -13,7 +14,14 @@
       register: result
     - name: add user to docker group
       shell: usermod -a -G docker ec2-user
-      register: result    
+      register: result   
+    - name: install docker-compose
+      shell: curl -L "https://github.com/docker/compose/releases/download/1.28.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    - name: chmod +x /usr/local/bin/docker-compose
+      ansible.builtin.file:
+        path: /usr/local/bin/docker-compose
+        mode: '755'
+        
     - name: install git
       yum:
         name: git
